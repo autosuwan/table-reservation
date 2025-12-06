@@ -11,4 +11,5 @@ type Reservation struct {
     People int `bson:"people" json:"people"`
 	ReservedAt time.Time `bson:"reserved_at" json:"reserved_at"`
 	ReservationID string `bson:"reservation_id" json:"reservation_id"`
+	Status string `bson:"status" json:"status"`
 }

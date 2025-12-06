@@ -22,6 +22,7 @@ func (s *service) Create(ctx context.Context, input CreateReservationDTO) error 
 		People:        input.People,
 		ReservedAt:    input.ReservedAt,
 		ReservationID: input.ReservationID,
+		Status: input.Status,
 	}
 
 	return s.repo.CreateReservation(ctx, reservation)

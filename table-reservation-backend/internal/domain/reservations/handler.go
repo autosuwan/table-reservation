@@ -17,10 +17,23 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 		return
 	}
 
-	if err := h.service.CreateReservation(c, dto); err != nil {
+	if err := h.service.Create(c, dto); err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(200, gin.H{"message": "Reservation created successfully"})
+}
+
+func (h *Handler) GetReservations(c *gin.Context) {
+	reservations, err := h.service.Get(c)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"data":  reservations,
+		"count": len(reservations),
+	})
 }

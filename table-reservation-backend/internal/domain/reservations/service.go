@@ -5,7 +5,8 @@ import (
 )
 
 type Service interface {
-	CreateReservation(ctx context.Context, input CreateReservationDTO) error
+	Create(ctx context.Context, input CreateReservationDTO) error
+	Get(ctx context.Context) ([]*Reservation, error)
 }
 
 type service struct {
@@ -16,8 +17,7 @@ func NewService(repo Repository) Service {
 	return &service{repo: repo}
 }
 
-func (s *service) CreateReservation(ctx context.Context, input CreateReservationDTO) error {
-	// Convert DTO to Reservation model
+func (s *service) Create(ctx context.Context, input CreateReservationDTO) error {
 	reservation := &Reservation{
 		People:        input.People,
 		ReservedAt:    input.ReservedAt,
@@ -25,4 +25,8 @@ func (s *service) CreateReservation(ctx context.Context, input CreateReservation
 	}
 
 	return s.repo.CreateReservation(ctx, reservation)
+}
+
+func (s *service) Get(ctx context.Context) ([]*Reservation, error) {
+	return s.repo.FindAllReservation(ctx)
 }

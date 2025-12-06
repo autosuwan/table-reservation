@@ -1,44 +1,53 @@
 package main
 
 import (
-    "context"
-    "fmt"
-    "log"
-    "os"
-    "time"
+	"log"
+	"os"
 
-    "github.com/joho/godotenv"
-    "go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/autosuwan/table-reservation/table-reservation-backend/config"
+	"github.com/autosuwan/table-reservation/table-reservation-backend/internal/domain/reservations"
+	reservationRoutes "github.com/autosuwan/table-reservation/table-reservation-backend/internal/server/routes/reservations"
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-    godotenv.Load()
+	// Load environment variables
+	if err := godotenv.Load(); err != nil {
+		log.Println("Warning: .env file not found")
+	}
 
-    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-    defer cancel()
+	// Connect to database
+	client, err := config.ConnectDatabase()
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
 
-    uri := os.Getenv("MONGODB_URI")
-    if uri == "" {
-        log.Fatal("MONGODB_URI is not set")
-    }
+	// Get database instance
+	dbName := os.Getenv("MONGODB_DATABASE")
+	if dbName == "" {
+		dbName = "table_reservation" // default database name
+	}
+	db := client.Database(dbName)
 
-    client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer client.Disconnect(ctx)
+	// Setup domains (dependency injection)
+	reservationHandler := reservations.Setup(db)
 
-    if err := client.Ping(ctx, nil); err != nil {
-        log.Fatal(err)
-    }
+	// Setup Gin router
+	router := gin.Default()
 
-    dbs, err := client.ListDatabaseNames(ctx, bson.D{})
-    if err != nil {
-        log.Fatal(err)
-    }
+	// Setup routes
+	reservationRoutes.SetupRoutes(router, reservationHandler)
 
-    fmt.Println("Databases:", dbs)
-    fmt.Println("Connected to MongoDB")
+	// Get port from environment or use default
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	// Start server
+	log.Printf("Server is running on port %s", port)
+	if err := router.Run(":" + port); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }

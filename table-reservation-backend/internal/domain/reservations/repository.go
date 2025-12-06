@@ -1,6 +1,9 @@
 package reservations
 
-import "context"
+import (
+	"context"
+
+)
 
 type Repository interface {
 	CreateReservation(ctx context.Context, r *Reservation) error

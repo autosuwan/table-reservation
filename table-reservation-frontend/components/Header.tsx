@@ -1,11 +1,9 @@
-import React from "react";
-
-export default function Header(){
+export default function Header({queue_length}: {queue_length: number}){
     return (
-            <div className="flex flex-col rounded-lg border border-[#8a8a8a] bg-white p-5">
-                <h1 className="text-2xl font-bold text-green-500">ระบบจองคิว</h1>
-                <p className="text-lg text-gray-700 font-normal">
-                    ยินดีต้อนรับสู่ระบบจองโต๊ะออนไลน์
+            <div className="flex flex-col p-5 gap-3">
+                <p className="text-lg font-normal text-black">สวัสดีครับคุณลูกค้า</p>
+                <p className="text-xl text-[#2EC563] font-bold">
+                    ตอนนี้มี {queue_length} คิวก่อนหน้า
                 </p>
             </div>
     );

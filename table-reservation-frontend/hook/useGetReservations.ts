@@ -1,5 +1,5 @@
-import { getReservations as getReservationsAPI } from "../lib/api/reservations";
-import { Reservation } from "../types/reservations";
+import { getReservations as getReservationsAPI } from "@/lib/api/reservations";
+import { Reservation } from "@/types/reservations";
 
 export const useGetReservations = () => {
     const getReservations = async () => {

@@ -1,5 +1,5 @@
 export interface Reservation {
-    id: string;
+    reservation_id: string;
     people: number;
     reserved_at: string;
     status: string;

@@ -1,4 +1,4 @@
-import { getQueueLength as getQueueLengthAPI } from "../lib/api/reservations";
+import { getQueueLength as getQueueLengthAPI } from "@/lib/api/reservations";
 
 export const useGetQueueLength = () => {
     const getQueueLength = async () => {

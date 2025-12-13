@@ -1,16 +1,20 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CirclePlus, CircleMinus } from 'lucide-react';
 import { Button } from "@heroui/button";
 import { useCreateReservation } from "@/hook/useCreateReservation";
 import { useGetQueueLength } from "@/hook/useGetQueueLength";
 import { generateQueueID } from "@/lib/utils/IDGenerate";
+import { useQueue } from "@/context/QueueContext";
 
 export default function Reservation(){
+    const router = useRouter();
     const [number, setNumber] = useState(1);
     const { createReservation } = useCreateReservation();
     const { getQueueLength } = useGetQueueLength();
+    const { saveID, savePeople } = useQueue();
 
     const handleAdd = () => {
             setNumber(number + 1);
@@ -29,14 +33,18 @@ export default function Reservation(){
             const queueID = generateQueueID(queueLength);
             
             const reservation = {
-                id: queueID,
+                reservation_id: queueID,
                 people: number,
                 reserved_at: new Date().toISOString(),
                 status: "pending",
             };
-            createReservation(reservation);
+            await createReservation(reservation);
+            saveID(queueID);
+            savePeople(number);
+            router.push(`/reservation`);
         } catch (error) {
             console.error("Failed to create reservation:", error);
+            alert(`เกิดข้อผิดพลาด: ${error instanceof Error ? error.message : 'ไม่สามารถจองคิวได้'}`);
         }
     }    
 
@@ -45,14 +53,14 @@ export default function Reservation(){
             <p className="text-xl text-center font-medium text-[#656565]">จำนวนลูกค้า (ท่าน)</p>
             <div className="relative">
                 <div className="flex flex-row gap-10">
-                    <button className="text-[#2EC563]" onClick={handleMinus}><CircleMinus size={35}/></button>
+                    <button type='button' className="text-[#2EC563]" onClick={handleMinus}><CircleMinus size={35}/></button>
                     <p className="text-[80px] font-bold text-black text-center py-10">{number}</p>
-                    <button className="text-[#2EC563]" onClick={handleAdd}><CirclePlus size={35}/></button>
+                    <button type='button' className="text-[#2EC563]" onClick={handleAdd}><CirclePlus size={35}/></button>
                 </div>
-                <p className="text-center text-[#656565] absolute left-1/2 -translate-x-1/2 bottom-0 whitespace-nowrap">สูงสุด 10 ท่าน / โต๊ะ</p>
+                <p className="pointer-events-none text-center text-[#656565] absolute left-1/2 -translate-x-1/2 bottom-0 whitespace-nowrap">สูงสุด 10 ท่าน / โต๊ะ</p>
             </div>
             <div className="left-1/2 -translate-x-1/2 absolute bottom-15 w-full px-15">
-                <Button onClick={handleCreateReservation} className="font-medium text-lg rounded-[6px] bg-linear-to-tr from-[#59BD9E] to-[#5DD099] text-white shadow-lg py-2 w-full">
+                <Button onPress={handleCreateReservation} className="font-medium text-lg rounded-[6px] bg-linear-to-tr from-[#59BD9E] to-[#5DD099] text-white shadow-lg py-2 w-full">
                     จองคิว
                 </Button>
             </div>

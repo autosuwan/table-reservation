@@ -7,9 +7,18 @@ export const useGetQueuePosition = () => {
         try {
             const reservations = await getReservations();
 
+            const parse = (value: string): number => {
+                const letter = value[0].toUpperCase();
+                const number = parseInt(value.slice(1), 10);
+
+                const letterIndex = letter.charCodeAt(0) - 'A'.charCodeAt(0);
+
+                return letterIndex * 9 + number;
+            };
+
             // Count all pending reservations except the current one
             const queuesBeforeCurrent = reservations.filter(r =>
-                r.status === 'pending' && r.reservation_id !== currentQueueId
+                r.status === 'pending' && parse(r.reservation_id) < parse(currentQueueId)
             ).length;
 
             return queuesBeforeCurrent;

@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-30">
       <div className="p-8">
-        <Header queue_length={1}/>
+        <Header/>
       </div>
       <div className="flex justify-center items-center">
         <Reservation/>

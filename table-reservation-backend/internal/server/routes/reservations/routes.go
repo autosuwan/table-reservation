@@ -12,6 +12,7 @@ func SetupRoutes(router *gin.Engine, reservationHandler *reservations.Handler) {
 		{
 			reservationRoutes.POST("", reservationHandler.CreateReservation)
 			reservationRoutes.GET("", reservationHandler.GetReservations)
+			reservationRoutes.GET("/queue-length", reservationHandler.GetQueueLength)
 		}
 	}
 

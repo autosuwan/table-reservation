@@ -37,3 +37,13 @@ func (h *Handler) GetReservations(c *gin.Context) {
 		"count": len(reservations),
 	})
 }
+
+func (h *Handler) GetQueueLength(c *gin.Context) {
+	queueLength, err := h.service.GetQueueLength(c)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{"data": queueLength})
+}

@@ -41,3 +41,12 @@ func (r *repository) FindAllReservation(ctx context.Context) ([]*Reservation, er
 
 	return reservations, nil
 }
+
+func (r *repository) GetQueueLength(ctx context.Context) (int, error) {
+	count, err := r.collection.CountDocuments(ctx, bson.M{})
+	if err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
+}

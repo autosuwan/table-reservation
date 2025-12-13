@@ -7,6 +7,7 @@ import (
 type Service interface {
 	Create(ctx context.Context, input CreateReservationDTO) error
 	Get(ctx context.Context) ([]*Reservation, error)
+	GetQueueLength(ctx context.Context) (int, error)
 }
 
 type service struct {
@@ -22,7 +23,7 @@ func (s *service) Create(ctx context.Context, input CreateReservationDTO) error 
 		People:        input.People,
 		ReservedAt:    input.ReservedAt,
 		ReservationID: input.ReservationID,
-		Status: input.Status,
+		Status:        input.Status,
 	}
 
 	return s.repo.CreateReservation(ctx, reservation)
@@ -30,4 +31,8 @@ func (s *service) Create(ctx context.Context, input CreateReservationDTO) error 
 
 func (s *service) Get(ctx context.Context) ([]*Reservation, error) {
 	return s.repo.FindAllReservation(ctx)
+}
+
+func (s *service) GetQueueLength(ctx context.Context) (int, error) {
+	return s.repo.GetQueueLength(ctx)
 }

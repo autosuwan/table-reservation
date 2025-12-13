@@ -1,0 +1,12 @@
+{
+    "buildCommand": "cd table-reservation-frontend && npm run build",
+    "outputDirectory": "table-reservation-frontend/.next",
+    "installCommand": "cd table-reservation-frontend && npm install",
+    "framework": "nextjs",
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/table-reservation-frontend/$1"
+        }
+    ]
+}

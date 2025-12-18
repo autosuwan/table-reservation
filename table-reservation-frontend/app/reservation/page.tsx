@@ -37,9 +37,9 @@ export default function Reservation() {
     }, [queueId]);
     return (
         <div className="min-h-screen bg-gradient-to-tr from-[#59BD9E] to-[#5DD099]">
-            <div className="flex flex-col justify-center items-center p-15 gap-10">
+            <div className="flex flex-col justify-center items-center pt-15 py-15 md:p-15 gap-10">
                 <p className="text-2xl font-bold text-white">จองคิวสำเร็จ!</p>
-                <div className="bg-white rounded-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] p-0 flex flex-col items-center relative overflow-hidden mb-6 w-1/2">
+                <div className="bg-white rounded-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] p-0 flex flex-col items-center relative overflow-hidden mb-6 w-[90%] md:w-1/2">
                 
                 {/* Header Ticket */}
                 <div className="w-full bg-slate-50 p-4 border-b border-dashed border-gray-200 text-center">
@@ -84,6 +84,8 @@ export default function Reservation() {
             <button onClick={handleCancel} className="w-1/2 left-1/2 -translate-x-1/2 absolute bg-white text-red-500 font-semibold py-4 rounded-xl shadow-lg mt-4 hover:bg-red-50 transition-colors">
                 ยกเลิกการจอง
             </button>
+
+            <div className="text-center text-xs text-white pt-40">*กรุณาแคปหน้าเจอตั่วไว้ เผื่อกรณีเผลอปิดหน้าเว็บ</div>
         </div>
     );
 }
